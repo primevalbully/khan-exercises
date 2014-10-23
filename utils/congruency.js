@@ -1,3 +1,9 @@
+define(function(require) {
+
+require("./angles.js");
+require("./interactive.js");
+require("./graphie-helpers.js");
+
 $.extend(KhanUtil, {
     // Add a "congruency" object that stores data about the
     // points, lines, and angles that you added to the congruency
@@ -161,7 +167,7 @@ $.extend(KhanUtil, {
 
             // the inverse function of the line
             line.invfunc = function(y) {
-                var slope = (line.slope === 0) ? 0.00001 : line.slope
+                var slope = (line.slope === 0) ? 0.00001 : line.slope;
                 return line.start[0] + (y - line.start[1]) / slope;
             };
 
@@ -269,6 +275,11 @@ $.extend(KhanUtil, {
                 // add our line
                 this.line.push(graph.line(this.start, this.end));
 
+                // add parallel line marker to horizontal line
+                if (direction[1] === 0) {
+                    ParallelLineMarkers(this.end[0] - 0.5, this.end[1]);
+                }
+
                 // set the attributes
                 this.line.attr(this.point.normalStyle);
                 this.point.visibleShape = this.line;
@@ -280,7 +291,7 @@ $.extend(KhanUtil, {
                             (line.start[1] + line.end[1]) / 2];
 
             // add a movable point
-            line.point = KhanUtil.addMovablePoint({
+            line.point = graph.addMovablePoint({
                 coord: pointPos
             });
             // Make it not move
@@ -407,7 +418,7 @@ $.extend(KhanUtil, {
             pointPos[0] += Math.cos(aveAngle) * angle.radius;
             pointPos[1] += Math.sin(aveAngle) * angle.radius;
 
-            angle.point = KhanUtil.addMovablePoint({
+            angle.point = graph.addMovablePoint({
                 coord: pointPos
             });
             // Make it not move
@@ -419,8 +430,8 @@ $.extend(KhanUtil, {
             $(angle.point.mouseTarget[0]).css("cursor", "pointer");
 
             // Increase the point's size
-            var pointRadius = Math.sin(KhanUtil.toRadians(angle.angle) / 2)
-                              * angle.radius * graph.scale[0];
+            var pointRadius = Math.sin(KhanUtil.toRadians(angle.angle) / 2) *
+                angle.radius * graph.scale[0];
             angle.point.mouseTarget.attr({ r: pointRadius });
 
             // Replace the shape with our angle
@@ -495,7 +506,7 @@ $.extend(KhanUtil, {
                 this.setStyles();
 
                 this.draw();
-            }
+            };
 
             // setup the original styles
             angle.setStyles();
@@ -603,12 +614,12 @@ $.extend(KhanUtil, {
 
             var point = null;
 
-            coord = [];
+            var coord = [];
 
-            coord[0] = (line1.slope * line1.start[0]
-                        - line2.slope * line2.start[0]
-                        + line2.start[1] - line1.start[1]) /
-                       (line1.slope - line2.slope);
+            coord[0] = (line1.slope * line1.start[0] -
+                        line2.slope * line2.start[0] +
+                        line2.start[1] - line1.start[1]) /
+                        (line1.slope - line2.slope);
             coord[1] = line1.func(coord[0]);
 
             point = congruency.addPoint(pointName, coord);
@@ -661,4 +672,6 @@ $.extend(KhanUtil, {
 
         return congruency;
     }
+});
+
 });

@@ -1,6 +1,6 @@
 # Khan Academy Exercises
 
-Copyright 2012 Khan Academy
+Copyright (c) 2014 Khan Academy
 
 The exercise framework is [MIT licensed](http://en.wikipedia.org/wiki/MIT_License).
 
@@ -15,14 +15,21 @@ The framework exists in two components:
 * An HTML markup for specifying exercises.
 * A jQuery plugin for generating a usable, interactive, exercise from the HTML markup.
 
-## Writing Exercises
 
-The process for writing exercises is rather well documented. More information about this process can be found in the [Khan Exercises wiki](https://github.com/Khan/khan-exercises/wiki). Specifically:
+## Using the Framework Locally
 
-* [How to Get Involved](https://github.com/Khan/khan-exercises/wiki/Getting-Involved)
-* [How to Write Exercises](https://github.com/Khan/khan-exercises/wiki/Writing-Exercises:-Home)
-* [How to Test Exercises](https://github.com/Khan/khan-exercises/wiki/Testing-Exercises)
+You need to serve the files from some sort of a server. You can't just open the files directly in a browser. For example:
+
+    cd khan-exercises
+    python -m SimpleHTTPServer # or python3 -m http.server
+
+Now if you open your browser to `http://localhost:8000` (or `http://127.0.0.1:8000/`) you should see the contents of the `khan-exercises` directory. Navigate to the `exercises` subfolder, and an HTML file under there to see an exercise.
+
+
+## Exercise Development
+
+This framework supports over 450 of our current math exercises including updated versions of many exercises Sal built for his cousins before he made his first video! New exercises on Khan Academy, however, are now written by many content experts using [Perseus](https://github.com/Khan/perseus) and stored in our datastore as individual questions.
 
 ## More
 
-If you're passionate about creating these exercises and want to apply to be a full-time exercise developer at the Khan Academy, [please do so](http://hire.jobvite.com/CompanyJobs/Careers.aspx?c=qd69Vfw7&page=Job%20Description&j=ohjSVfw7).
+If you're passionate about providing a free world-class education for anyone, anywhere and want to apply to be a full-time or intern software developer at Khan Academy, [please do so](https://www.khanacademy.org/careers).

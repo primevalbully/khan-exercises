@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html data-require="math graphie">
-    <head>
+<head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Identifying points</title>
-        <script src="../khan-exercise.js"></script>
+    <title>Points on the coordinate plane</title>
+        <script data-main="../local-only/main.js" src="../local-only/require.js"></script>
     </head>
     <body>
         <div class="exercise">
@@ -16,7 +16,7 @@
                             var point = [ randRange( -9, 9 ), randRangeExclude( -9, 9, [-1] ) ];
                             var isUnique = true;
                             $.each( points, function( index, pt ) {
-                                if ( point[0] === pt[0] && point[1] === pt[1] ) {
+                                if ( point[0] === pt[0] &amp;&amp; point[1] === pt[1] ) {
                                     isUnique = false;
                                     return false;
                                 }
@@ -49,7 +49,7 @@
                             graphInit({
                                 range: 10,
                                 scale: 20,
-                                axisArrows: "<->",
+                                axisArrows: "&lt;-&gt;",
                                 tickStep: 1,
                                 labelStep: 2
                             })
@@ -62,7 +62,7 @@
                                     stroke: "#6495ED",
                                     fill: "#6495ED"
                                 }, function() {
-                                    circle( point, 0.15 );
+                                    circle( point, 0.2 );
                                 });
 
                             });
@@ -77,19 +77,21 @@
             </div>
 
             <div class="hints">
-                <div data-each="POINTS as i, point" data-unwrap>
-                    <div data-if="FORGOTTEN !== i" class="graphie" data-update="grid">
+                <div data-each="POINTS as i, point" data-unwrap="">
+                    <div class="graphie" data-if="FORGOTTEN !== i" data-update="grid">
                         label( point, PAIR( point ), "above right" );
                     </div>
                 </div>
 
-                <div class="graphie" data-update="grid">
-                    var point = POINTS[FORGOTTEN];
-                    label( point, PAIR( point ), "above right");
-                    label( point, "\\text{was not graphed.}", "right" );
-                    circle( point, 0.3, { stroke: "red" } );
+                <div>
+                    <div class="graphie" data-update="grid">
+                        var point = POINTS[FORGOTTEN];
+                        label( point, PAIR( point ), "above right", { color: RED });
+                        circle( point, 0.3, { stroke: RED } );
+                    </div>
+                    <p><code>(<var>POINTS[FORGOTTEN]</var>)</code> was not graphed.</p>
                 </div>
             </div>
         </div>
-    </body>
+</body>
 </html>

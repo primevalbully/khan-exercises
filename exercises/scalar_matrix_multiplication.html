@@ -1,57 +1,49 @@
 <!DOCTYPE html>
-<html data-require="math matrix">
+<html data-require="math math-format kmatrix matrix-input">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Scalar matrix multiplication</title>
-    <script src="../khan-exercise.js"></script>
-    <style>
-        #answer_area .row input[type=text] {
-            width: 40px;
-        }
-
-        #answer_area .row {
-            margin: 0;
-        }
-    </style>
+    <script data-main="../local-only/main.js" src="../local-only/require.js"></script>
 </head>
 <body>
     <div class="exercise">
 
     <div class="vars">
         <var id="MAT_A">randRange(-2, 4, ROWS, COLS)</var>
-        <var id="SCALAR">randRange(-5, 5)</var>
-        <var id="OPERATION">"*"</var>
+        <var id="SCALAR">randFromArray([-1, 1]) * (rand(4) === 0 ? randRange(1, 3) / 4 : randRange(2, 5))</var>
+        <var id="SCALAR_TEXT">decimalFraction(SCALAR, true)</var>
+        <var id="OPERATION">"\\times"</var>
 
         <var id="SOLN_MAT">
             deepZipWith(2, function(a) {
                 return a * SCALAR;
             }, MAT_A)
         </var>
-        <var id="SCALAR_MAT">
-            deepZipWith(2, function(a) {
-                return SCALAR;
-            }, MAT_A)
-        </var>
+        <var id="PADDED_SOLN_MAT">matrixPad(SOLN_MAT, 3, 3)</var>
 
         <var id="MAT_A_COLOR">BLUE</var>
         <var id="SCALAR_COLOR">GREEN</var>
         <var id="SOLN_MAT_COLOR">PINK</var>
 
         <var id="PRETTY_MAT_A">
-            printMatrix(MAT_A, MAT_A_COLOR)
+            printSimpleMatrix(MAT_A, MAT_A_COLOR)
         </var>
         <var id="PRETTY_HINT_MAT">
-            printMatrix(SCALAR_MAT, SCALAR_COLOR, MAT_A, MAT_A_COLOR, OPERATION)
+            printMatrix(function(a) {
+                var s = colorMarkup(SCALAR_TEXT, SCALAR_COLOR);
+                var b = colorMarkup(a, MAT_A_COLOR);
+                return s + OPERATION + b;
+            }, MAT_A)
         </var>
         <var id="PRETTY_SOLN_MAT">
-            printMatrix(SOLN_MAT, SOLN_MAT_COLOR)
+            printFractionMatrix(SOLN_MAT, SOLN_MAT_COLOR)
         </var>
     </div>
 
     <div class="question">
         <code>
             \Large{
-                \color{<var>SCALAR_COLOR</var>}{<var>SCALAR</var>}
+                \color{<var>SCALAR_COLOR</var>}{<var>SCALAR_TEXT</var>}
                 <var>OPERATION</var>
                 <var>PRETTY_MAT_A</var> = {?}
             }
@@ -74,11 +66,16 @@
     </div>
 
     <div class="solution" data-type="multiple">
-        <p data-each="SOLN_MAT as row" class="row">
-            <span data-each="row as elem" class="sol">
-                <var>elem</var>
+        <div class="matrix-row" data-each="PADDED_SOLN_MAT as row">
+            <span data-each="row as elem">
+                <span class="sol" data-if="elem !== ''">
+                    <var>elem</var>
+                </span>
+                <span class="sol" data-else="" data-type="text">
+                    <var>elem</var>
+                </span>
             </span>
-        </p>
+        </div>
     </div>
 
     <div class="problems">

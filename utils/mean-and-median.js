@@ -1,9 +1,11 @@
+define(function(require) {
+
+require("./stat.js");
+
 $.extend(KhanUtil, {
 
     updateMean: function(mean) {
         var graph = KhanUtil.currentGraph;
-
-        $(graph.graph.meanValueLabel).html(mean).tmpl();
 
         graph.graph.meanArrow.translate((mean * graph.scale[0]) - graph.graph.meanArrow.attr("translation").x, 0);
         graph.graph.meanValueLabel.remove();
@@ -14,7 +16,8 @@ $.extend(KhanUtil, {
         );
 
         graph.graph.meanLabel.remove();
-        graph.graph.meanLabel = graph.label([mean, 1.3], "\\text{mean}", "above", { color: KhanUtil.BLUE });
+        graph.graph.meanLabel = graph.label([mean, 1.3], $._("\\text{mean}"),
+            "above", { color: KhanUtil.BLUE });
 
         graph.graph.mean = mean;
     },
@@ -32,7 +35,8 @@ $.extend(KhanUtil, {
         );
 
         graph.graph.medianLabel.remove();
-        graph.graph.medianLabel = graph.label([median, -1.7], "\\text{median}", "below", { color: KhanUtil.GREEN });
+        graph.graph.medianLabel = graph.label([median, -1.7],
+            $._("\\text{median}"), "below", { color: KhanUtil.GREEN });
 
         graph.graph.median = median;
     },
@@ -129,14 +133,14 @@ $.extend(KhanUtil, {
             $.each(points, function() {
                 if (this !== point) {
                     var pos = Math.round(this.coord[0] * 2) / 2;
-                    if (!$.isArray(positions[pos])) {
+                    if (!_.isArray(positions[pos])) {
                         positions[pos] = [];
                     }
                     positions[pos].push(this);
                 }
             });
 
-            if ($.isFunction(updateFunction)) {
+            if (_.isFunction(updateFunction)) {
                 updateFunction();
             }
 
@@ -219,7 +223,6 @@ $.extend(KhanUtil, {
     showMedianExample: function(onComplete) {
         var points = KhanUtil.currentGraph.graph.points;
         var targetMedian = KhanUtil.currentGraph.graph.targetMedian;
-        var maxWidth = Math.min(Math.abs(-7 - targetMedian), Math.abs(7 - targetMedian));
         var sortedPoints = points.sort(function(a, b) { return a.coord[0] - b.coord[0]; });
         var oldValues = [];
         $.each(sortedPoints, function(i, point) {
@@ -247,7 +250,6 @@ $.extend(KhanUtil, {
 
         var sortedPoints = points.sort(function(a, b) { return a.coord[0] - b.coord[0]; });
         var oldValues = [];
-        var newValues = [];
         $.each(sortedPoints, function(i, point) {
             oldValues.push(point.coord[0]);
         });
@@ -257,7 +259,7 @@ $.extend(KhanUtil, {
         // Keep moving outlier points further away from the median until
         // we get to the right mean
         var mean = calculateMean(newValues);
-        while (mean != graph.graph.targetMean) {
+        while (mean !== graph.graph.targetMean) {
             if (mean < graph.graph.targetMean) {
                 // Start by moving the right-most point further to the right, then the next, etc.
                 var pointToMove = newValues.length - 1;
@@ -338,5 +340,7 @@ $.extend(KhanUtil, {
         });
         KhanUtil.currentGraph.graph.moved = true;
     }
+
+});
 
 });

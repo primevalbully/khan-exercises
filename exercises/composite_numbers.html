@@ -3,14 +3,14 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Composite numbers</title>
-    <script src="../khan-exercise.js"></script>
+    <script data-main="../local-only/main.js" src="../local-only/require.js"></script>
 </head>
 <body>
     <div class="exercise">
         <div class="vars">
             <var id="COMPOSITE">rand( 5 ) === 0 ? getEvenComposite() : getOddComposite()</var>
             <var id="PRIMES">shuffle( primes, 4 )</var>
-            <var id="CHOICES">shuffle( PRIMES.concat([ COMPOSITE ]) )</var>
+            <var id="CHOICES">sortNumbers( PRIMES.concat([ COMPOSITE ]) )</var>
         </div>
 
         <div class="problems">

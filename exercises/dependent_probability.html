@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Dependent probability</title>
-    <script src="../khan-exercise.js"></script>
+    <script data-main="../local-only/main.js" src="../local-only/require.js"></script>
 </head>
 <body>
     <div class="exercise">
@@ -18,10 +18,10 @@
                     </var>
                     <var id="EVENT_PY, EVENT_PN, EVENT_Y, EVENT_N">
                     randFromArray(
-                        [["will be eaten by bears",
-                            "will not be eaten by bears",
-                            "will be eaten by bears",
-                            "will not be eaten by bears"],
+                        [["will visit Mars",
+                            "will not visit Mars",
+                            "will visit Mars",
+                            "will not visit Mars"],
                          ["have done their homework",
                             "have not done their homework",
                             "has done his homework",
@@ -62,19 +62,9 @@
                             return prs;
                         })()
                     </var>
-                    <var id="ANS_N,ANS_D">
-                        (function(){
-                            n = d = 1;
-                            _.each(PROBS, function(frac) {
-                                n *= frac[0];
-                                d *= frac[1];
-                            });
-                            gcd = getGCD(n, d);
-                            n = n/gcd;
-                            d = d/gcd;
-                            return [n, d];
-                        })()
-                    </var>
+                    <var id="ANS_N">_.reduce(PROBS, function(n, frac) { return n * frac[0]; }, 1)</var>
+                    <var id="ANS_D">_.reduce(PROBS, function(n, frac) { return n * frac[1]; }, 1)</var>
+                    <var id="GCD">getGCD(ANS_N, ANS_D)</var>
                 </div>
 
                 <p class="problem">
@@ -86,26 +76,36 @@
                 <p class="question">
                     If the teacher chooses <code><var>CHOSEN</var></code>
                     students, what is the probability that 
-                    <var>ALL ? ((CHOSEN === 2) ? "both" : "all") :
-                    ((CHOSEN === 2) ? "neither" : "none")</var>
+                    <var>ALL ? ((CHOSEN === 2) ? "both" : "all " + cardinalThrough20(CHOSEN)) :
+                    ((CHOSEN === 2) ? "neither" : "none of the " + cardinalThrough20(CHOSEN))</var>
                     of them <var>EVENT_PY</var>?
                 </p>
 
-                <div class="solution" data-forms="proper">
-                    <var>ANS_N/ANS_D</var>
+                <div class="solution" data-forms="proper, improper, decimal, percent" data-simplify="optional">
+                    <var>ANS_N / ANS_D</var>
                 </div>
 
                 <div class="hints">
-                    <p>
+                    <p data-if="CHOSEN > 2">
                         We can think about this problem as the probability of 
                         <code><var>CHOSEN</var></code> events happening.
-                        </br></br>
+                        <br><br>
                         The first event is the teacher choosing one student
                         who <var>EVENT_S</var>. The second event is the teacher
                         choosing another student who <var>EVENT_S</var>, given
                         that the teacher already chose someone who 
                         <var>EVENT_S</var> 
-                        <var>CHOSEN > 2 ? ", and so on." : "."</var>
+                        , and so on.
+                    </p><p data-else="">
+                        We can think about this problem as the probability of 
+                        <code><var>CHOSEN</var></code> events happening.
+                        <br><br>
+                        The first event is the teacher choosing one student
+                        who <var>EVENT_S</var>. The second event is the teacher
+                        choosing another student who <var>EVENT_S</var>, given
+                        that the teacher already chose someone who 
+                        <var>EVENT_S</var> 
+                        .
                     </p>
                     <p>
                         The probabilty that the teacher will choose someone
@@ -129,7 +129,7 @@
                         <code>\dfrac{<var>PROBS[1][0]</var>}
                                     {<var>PROBS[1][1]</var>}</code>.
                     </p>
-                    <p data-if="CHOSEN &gt; 2">
+                    <p data-if="CHOSEN > 2">
                         The probability of the teacher picking two
                         students who <var>EVENT_P</var> must then be
                         <code>\dfrac{<var>PROBS[0][0]</var>}
@@ -137,21 +137,27 @@
                               \dfrac{<var>PROBS[1][0]</var>}
                                     {<var>PROBS[1][1]</var>}</code>.
                     </p>
-                    <p data-if="CHOSEN &gt; 2">
+                    <p data-if="CHOSEN > 2">
                         We can continue using the same logic for the rest of
                         the students the teacher picks.
                     </p>
-                    <p>
-                        So, the probability of the teacher picking 
-                        <code><var>CHOSEN</var></code> students such that
-                        <var>ALL ? ((CHOSEN === 2) ? "both" : "all") 
-                                 : "none"</var> of them 
-                        <var>EVENT_PY</var> is 
-                        <code><var>_.map(PROBS, function(p){
-                            return "\\dfrac{"+p[0]+"}{"+p[1]+"}";
-                        }).join("\\cdot")</var> =
-                        \dfrac{<var>ANS_N</var>}{<var>ANS_D</var>}</code>
-                    </p>
+                    <div>
+                        <p>
+                            So, the probability of the teacher picking 
+                            <code><var>CHOSEN</var></code> students such that
+                            <var>ALL ? ((CHOSEN === 2) ? "both" : "all") 
+                                     : "none"</var> of them 
+                            <var>EVENT_PY</var> is:
+                        </p>
+                        <p><code>\qquad<var>_.map(PROBS, function(p){
+                                return "\\dfrac{"+p[0]+"}{"+p[1]+"}";
+                            }).join("\\cdot")</var> =
+                            \dfrac{<var>ANS_N</var>}{<var>ANS_D</var>}
+                            <span data-if="GCD !== 1">
+                                = <var>fractionReduce(ANS_N, ANS_D)</var>
+                            </span></code>
+                        </p>
+                    </div>
                 </div>
             </div>
             <div id="marbles">
@@ -182,34 +188,26 @@
                         COLOR_ONE === COLOR_T ? 
                         NUM_TWO - 1 : NUM_TWO
                     </var>
-                    <var id="ANS_N">
-                        NUM_ONE*AFTER_NUM/
-                        getGCD(NUM_ONE*AFTER_NUM,TOTAL*(TOTAL-1))
-                    </var>
-                    <var id="ANS_D">
-                        TOTAL*(TOTAL-1)/
-                        getGCD(NUM_ONE*AFTER_NUM,TOTAL*(TOTAL-1))
-                    </var>
+                    <var id="ANS_N">NUM_ONE * AFTER_NUM</var>
+                    <var id="ANS_D">TOTAL * (TOTAL - 1)</var>
                 </div>
 
                 <p class="problem">
-                    <p>A <var>CONTAINER</var> contains 
+                    </p><p>A <var>CONTAINER</var> contains 
                     <code><var>REDMAR</var></code> red <var>MARBLE</var>s,
                     <code><var>GREENMAR</var></code> green <var>MARBLE</var>s,
                     and <code><var>BLUEMAR</var></code>
                     blue <var>MARBLE</var>s.</p>
-                </p>
-                <div class="question">
-                    <p>If we choose a <var>MARBLE</var>, then another <var>
-                    MARBLE</var>
+                <p></p>
+                <p class="question">
+                    If we choose a <var>MARBLE</var>, then another <var>MARBLE</var>
                     <em>without putting the first one back in the <var>
                     CONTAINER</var></em>, what is the probability that 
                     the first <var>MARBLE</var> will be <var>COLOR_ONE</var> 
-                     and the second will be <var>COLOR_T</var><var>COLOR_ONE === COLOR_T ? " as well?" : "?"</var> Write 
-                    your answer as a simplified fraction.</p>
-                </div>
-                <div class="solution" data-forms="proper">
-                    <var>(NUM_ONE/TOTAL)*(AFTER_NUM/(TOTAL-1))</var>
+                    and the second will be <var>COLOR_T</var><var>COLOR_ONE === COLOR_T ? " as well?" : "?"</var>
+                </p>
+                <div class="solution" data-forms="proper, improper, decimal, percent"  data-simplify="optional">
+                    <var>ANS_N / ANS_D</var>
                 </div>
                 <div class="hints">
                     <p>
@@ -217,7 +215,7 @@
                         the probability of event A happening times
                         the probability of event B happening <em>given that
                         event A already happened</em>. 
-                        </br></br>
+                        <br><br>
                         In this case, event A is picking a <var>COLOR_ONE</var>
                         <var>MARBLE</var> and leaving it out.
                         Event B is picking <var>COLOR_TWO</var> 
@@ -225,7 +223,7 @@
                     </p>
                     <p>
                         Let's take the events one at at time. 
-                        What is the probability that the first marble chosen 
+                        What is the probability that the first <var>MARBLE</var> chosen 
                         will be <var>COLOR_ONE</var>?
                     </p>
                     <p>
@@ -248,7 +246,7 @@
                         <var>MARBLE</var>s, so there are only 
                         <code><var>AFTER_NUM</var></code> left altogether.
                     </p>
-                    <p data-else>
+                    <p data-else="">
                         Since the first <var>MARBLE</var> was 
                         <var>COLOR_ONE</var>, there are still 
                         <code><var>AFTER_NUM</var></code> 
@@ -268,12 +266,13 @@
                         <var>COLOR_TWO</var> <var>MARBLE</var>
                         is <code>\dfrac{<var>NUM_ONE</var>}{<var>TOTAL</var>} 
                         \cdot \dfrac{<var>AFTER_NUM</var>}{<var>TOTAL-1</var>}
-                        = \dfrac{<var>ANS_N</var>}{<var>ANS_D</var>}</code>
+                        = \dfrac{<var>ANS_N</var>}{<var>ANS_D</var>}
+                        = <var>fractionReduce(ANS_N, ANS_D)</var></code>
                     </p>
                 </div>
             </div>
             <div id="YARR">
-                <div class="vars" data-ensure="CAPTAIN_PROB > PIRATE_PROB">
+                <div class="vars" data-ensure="CAPTAIN_PROB &gt; PIRATE_PROB">
                     <var id="C_FIRST">random() &lt; 0.5</var>
                     <var id="CAPTAIN_NUM">randRange(1,4)</var>
                     <var id="CAPTAIN_DEM">CAPTAIN_NUM + randRange(1,6)</var>
@@ -300,19 +299,20 @@
                             }
                         })()
                     </var>
-                    <var id="ANS_N, ANS_D, ANSWER">
+                    <var id="ANS_N, ANS_D">
                         (function(){
                             if(C_FIRST) {
-                                return [[CAPTAIN_NUM, CAPTAIN_DEM, CAPTAIN_PROB],
-                                [(CAPTAIN_DEM-CAPTAIN_NUM) * PIRATE_NUM, CAPTAIN_DEM*PIRATE_DEM, (1-CAPTAIN_PROB)*PIRATE_PROB],
-                                [0,1,0]][INDEX];
+                                return [[CAPTAIN_NUM, CAPTAIN_DEM],
+                                [(CAPTAIN_DEM - CAPTAIN_NUM) * PIRATE_NUM, CAPTAIN_DEM * PIRATE_DEM],
+                                [0, 1]][INDEX];
                             } else {
-                                return [[CAPTAIN_NUM * (PIRATE_DEM-PIRATE_NUM), CAPTAIN_DEM*PIRATE_DEM, CAPTAIN_PROB*(1-PIRATE_PROB)],
-                                [PIRATE_NUM, PIRATE_DEM, PIRATE_PROB],
-                                [0,1,0]][INDEX];
+                                return [[CAPTAIN_NUM * (PIRATE_DEM - PIRATE_NUM), CAPTAIN_DEM * PIRATE_DEM],
+                                [PIRATE_NUM, PIRATE_DEM],
+                                [0, 1]][INDEX];
                             }
                         })()
                     </var>
+                    <var id="ANSWER">ANS_N / ANS_D</var>
                     <var id="C">INDEX === 0 || INDEX === 2</var>
                     <var id="P">INDEX === 1 || INDEX === 2</var>
                     <var id="EV_A, PR_A">
@@ -345,54 +345,93 @@
                             }
                         })()
                     </var>
+                    <var id="DISTANCE">cardinalThrough20(randRange(2, 5))</var>
                 </div>
 
                 <p>
-                    Captain <var>person(1)</var> and <var>his(1)</var> ship, the H.M.S Crimson Lynx, are two furlongs
-                    from the dread pirate <var>person(2)</var> and <var>his(2)</var> merciless band of scallawags.
+                    <span>Captain <var>person(1)</var> has a ship, the H.M.S Crimson Lynx.</span>
+                    <span data-if="isMale(2)">
+                        The ship is <var>DISTANCE</var> furlongs from the dread pirate <var>person(2)</var> and his merciless band of thieves.
+                    </span>
+                    <span data-else="">
+                        The ship is <var>DISTANCE</var> furlongs from the dread pirate <var>person(2)</var> and her merciless band of thieves.
+                    </span>
                 </p>
-                <p>
-                    The Captain has probability <code><var>C_HIT_PRETTY</var></code> of hitting the pirate ship, if <var>his(1)</var>
-                    ship hasn't already been hit. If it has been hit, <var>he(1)</var> will always miss.
-                    The pirate has probability <code><var>P_HIT_PRETTY</var></code> of hitting the
-                    Captain's ship, if <var>his(2)</var> ship hasn't already been hit. If it has been hit, <var>he(2)</var> will always
-                    miss as well.
+                <div>
+                    <p data-if="isMale(1)">
+                        If his ship hasn't already been hit, Captain <var>person(1)</var> has probability
+                        <code><var>C_HIT_PRETTY</var></code> of hitting the pirate ship.
+                        If his ship has been hit, Captain <var>person(1)</var> will always miss.
+                    </p><p data-else="">
+                        If her ship hasn't already been hit, Captain <var>person(1)</var> has probability
+                        <code><var>C_HIT_PRETTY</var></code> of hitting the pirate ship.
+                        If her ship has been hit, Captain <var>person(1)</var> will always miss.
+                    </p>
+                    <p data-if="isMale(2)">
+                        If his ship hasn't already been hit, dread pirate <var>person(2)</var> has probability
+                        <code><var>P_HIT_PRETTY</var></code> of hitting the Captain's ship.
+                        If his ship has been hit, dread pirate <var>person(2)</var> will always miss.
+                    </p><p data-else="">
+                        If her ship hasn't already been hit, dread pirate <var>person(2)</var> has probability
+                        <code><var>P_HIT_PRETTY</var></code> of hitting the Captain's ship.
+                        If her ship has been hit, dread pirate <var>person(2)</var> will always miss.
+                    </p>
+                </div>
+
+                <p class="question" data-if="C_FIRST">
+                    If the Captain and the pirate each shoot once, and the Captain shoots first,
+                    what is the probability that <var>QUESTION</var>?
+                </p><p data-else="">
+                    If the Captain and the pirate each shoot once, and the pirate shoots first,
+                    what is the probability that <var>QUESTION</var>?
                 </p>
 
-                <p class="question">
-                    If the <var>C_FIRST ? "Captain" : "pirate"</var> shoots first, what is the probability that
-                    <var>QUESTION</var>?
-                </p>
-
-                <div class="solution" data-forms="proper">
+                <div class="solution" data-forms="integer, proper, improper, decimal, percent">
                     <var>ANSWER</var>
                 </div>
 
                 <div class="hints">
                     <p>
                         The probability of event A happening, then event B, is the probability of 
-                        event A happening times
-                        the probability of event B happening <em>given that event A already happened</em>. 
-                        </br></br>
+                        event A happening times the probability of event B happening
+                        <em>given that event A already happened</em>. 
+                        <br><br>
                         In this case, event A is <var>EV_A</var> and event B is <var>EV_B</var>.
                     </p>
-                    <p>
-                        The <var>C_FIRST ? "Captain" : "pirate"</var> fires first, so 
-                        <var>his(C_FIRST ? 1 : 2)</var> ship can't be sunk before
-                        <var>he(C_FIRST ? 1 : 2)</var> fires his cannons.
+                    <p data-if="isMale(C_FIRST ? 1 : 2)">
+                        <span data-if="C_FIRST">
+                            The Captain fires first, so his ship can't be sunk before he fires his cannons.
+                        </span>
+                        <span data-else="">
+                            The pirate fires first, so his ship can't be sunk before he fires his cannons.
+                        </span>
+                    </p>
+                    <p data-else="">
+                        <span data-if="C_FIRST">
+                            The Captain fires first, so her ship can't be sunk before she fires her cannons.
+                        </span>
+                        <span data-else="">
+                            The pirate fires first, so her ship can't be sunk before she fires her cannons.
+                        </span>
                     </p>
                     <p>
                         So, the probability of <var>EV_A</var> is <code><var>PR_A</var></code>.
                     </p>
                     <p data-if="PR_B === 0 || PR_B === 1">
-                        If the <var>C_FIRST ? "Captain" : "pirate"</var> hit the <var>C_FIRST ? "pirate" : "Captain's"</var> ship,
-                        the <var>C_FIRST ? "pirate" : "Captain"</var> has no chance of firing back.
+                        <span data-if="C_FIRST">
+                            If the Captain hit the pirate ship, the pirate has no chance of firing back.
+                        </span>
+                        <span data-else="">
+                            If the pirate hit the Captain's ship, the Captain has no chance of firing back.
+                        </span>
                     </p>
-                    <p data-else>
-                        If the <var>C_FIRST ? "Captain" : "pirate"</var> 
-                         missed the <var>C_FIRST ? "pirate" : "Captain's"</var>
-                         ship,
-                        the <var>C_FIRST ? "pirate" : "Captain"</var> has a normal chance to fire back.
+                    <p data-else="">
+                        <span data-if="C_FIRST">
+                            If the Captain missed the pirate ship, the pirate has a normal chance to fire back.
+                        </span>
+                        <span data-else="">
+                            If the pirate missed the Captain's ship, the Captain has a normal chance to fire back.
+                        </span>
                     </p>
                     <p>
                         So, the probability of <var>EV_B</var> given <var>EV_A</var> is <code><var>PR_B</var></code>.

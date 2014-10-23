@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html data-require="math graphie">
-    <head>
+<head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Prime factorization</title>
-        <script src="../khan-exercise.js"></script>
+        <script data-main="../local-only/main.js" src="../local-only/require.js"></script>
     </head>
     <body>
         <div class="exercise">
@@ -63,7 +63,7 @@
                             </div>
                         </div>
 
-                        <div class="graphie" data-update="factor-tree" data-each="FACTORIZATION as factor">
+                        <div class="graphie" data-each="FACTORIZATION as factor" data-update="factor-tree">
                                 path( [ [cx + 1, y - 0.5], [cx, y - 1.5] ] );
                                 path( [ [cx + 1, y - 0.5], [cx + 2, y - 1.5] ] );
                                 y -= 2;
@@ -80,14 +80,10 @@
                             circle( [cx + 1, y], 0.5);
                         </div>
 
-                        <p>The prime factorization of <code><var>NUMBER</var></code> is <code><var>SOLUTION.join(" &times; ")</var></code>.</p>
+                        <p>The prime factorization of <code><var>NUMBER</var></code> is <code><var>SOLUTION.join(" \\times ")</var></code>.</p>
                     </div>
                 </div>
             </div>
-
-            <div class="hints">
-
-            </div>
         </div>
-    </body>
+</body>
 </html>

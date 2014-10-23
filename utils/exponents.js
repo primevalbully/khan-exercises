@@ -1,3 +1,8 @@
+define(function(require) {
+
+require("./math.js");
+require("./math-format.js");
+
 $.extend(KhanUtil, {
 
     /* fraction math-format function called with defraction enabled, which is always
@@ -68,8 +73,8 @@ $.extend(KhanUtil, {
 
             steps.unshift(
                 (i === exp - 1 ? parens : noParens)
-                    .call(this, mult_n, mult_d)
-                    + expansion);
+                    .call(this, mult_n, mult_d) +
+                    expansion);
 
             expansion += "\\cdot " + base_str;
         }
@@ -146,4 +151,6 @@ $.extend(KhanUtil, {
             root: root
         };
     }
+});
+
 });

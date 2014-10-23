@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html data-require="math math-format graphie">
-    <head>
+<head>
         <title>Recognizing conic sections</title>
-        <script src="../khan-exercise.js"></script>
+        <script data-main="../local-only/main.js" src="../local-only/require.js"></script>
     </head>
     <body>
         <div class="exercise">
@@ -19,7 +19,7 @@
                     </div>
 
                     <div class="problem">
-                        <p>Identify this conic section.</p>
+                        <p>Identify this conic section. Give the most specific name.</p>
 
                         <div class="graphie" id="conic">
                             graphInit({
@@ -53,10 +53,10 @@
 
                 <div id="ellipse" data-type="parabola">
                     <div class="vars">
-                        <var id="A">randRangeNonZero( -70, 70 ) / 10</var>
-                        <var id="B" data-ensure="abs( abs( A ) - abs( B ) ) > 1">randRangeNonZero( -70, 70 ) / 10</var>
-                        <var id="C">randRangeNonZero( -30, 30 ) / 10</var>
-                        <var id="D">randRangeNonZero( -30, 30 ) / 10</var>
+                        <var id="A">randRangeNonZero(10, 70) / 10</var>
+                        <var id="B" data-ensure="abs(abs(A) - abs(B)) > 1">randRangeNonZero(10, 70) / 10</var>
+                        <var id="C">randRangeNonZero(-30, 30) / 10</var>
+                        <var id="D">randRangeNonZero(-30, 30) / 10</var>
 
                         <var id="PARA_FUNC">function( t ) {
                             return [ A * cos( t ) + C, B * sin( t ) + D ];
@@ -78,7 +78,7 @@
                 </div>
 
                 <div id="circle" data-type="ellipse">
-                    <div class="vars" data-ensure="A > 0.5">
+                    <div class="vars" data-ensure="A &gt; 0.5">
                         <var id="A">randRangeNonZero( -70, 70 ) / 10</var>
                         <var id="B">A</var>
                     </div>
@@ -126,5 +126,5 @@
                 </div>
             </div>
         </div>
-    </body>
+</body>
 </html>

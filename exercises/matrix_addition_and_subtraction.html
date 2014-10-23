@@ -1,19 +1,9 @@
 <!DOCTYPE html>
-<html data-require="math matrix">
+<html data-require="math kmatrix matrix-input">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Matrix addition and subtraction</title>
-    <script src="../khan-exercise.js"></script>
-    <style>
-        #answer_area .row input[type=text] {
-            width: 40px;
-            margin-right: 5px;
-        }
-
-        #answer_area .row {
-            margin: 0;
-        }
-    </style>
+    <script data-main="../local-only/main.js" src="../local-only/require.js"></script>
 </head>
 <body>
     <div class="exercise">
@@ -32,22 +22,27 @@
                 }
             }, MAT_A, MAT_B)
         </var>
+        <var id="PADDED_SOLN_MAT">matrixPad(SOLN_MAT, 3, 3)</var>
 
         <var id="MAT_A_COLOR">BLUE</var>
         <var id="MAT_B_COLOR">GREEN</var>
         <var id="SOLN_MAT_COLOR">PINK</var>
 
         <var id="PRETTY_MAT_A">
-            printMatrix(MAT_A, MAT_A_COLOR)
+            printSimpleMatrix(MAT_A, MAT_A_COLOR)
         </var>
         <var id="PRETTY_MAT_B">
-            printMatrix(MAT_B, MAT_B_COLOR)
+            printSimpleMatrix(MAT_B, MAT_B_COLOR)
         </var>
         <var id="PRETTY_HINT_MAT">
-            printMatrix(MAT_A, MAT_A_COLOR, MAT_B, MAT_B_COLOR, OPERATION)
+            printMatrix(function(a, b) {
+                a = colorMarkup(a, MAT_A_COLOR);
+                b = colorMarkup(b, MAT_B_COLOR);
+                return a + OPERATION + b;
+            }, MAT_A, MAT_B)
         </var>
         <var id="PRETTY_SOLN_MAT">
-            printMatrix(SOLN_MAT, SOLN_MAT_COLOR)
+            printSimpleMatrix(SOLN_MAT, SOLN_MAT_COLOR)
         </var>
     </div>
 
@@ -63,10 +58,10 @@
         <div>
             <p>To find the
                 <span data-if="OPERATION === '+'">sum</span>
-                <span data-else>difference</span>
+                <span data-else="">difference</span>
                 of two matrices,
                 <span data-if="OPERATION === '+'">add</span>
-                <span data-else>subtract</span>
+                <span data-else="">subtract</span>
                 the corresponding items between each matrix.
             </p>
             <div>
@@ -82,11 +77,16 @@
     </div>
 
     <div class="solution" data-type="multiple">
-        <p data-each="SOLN_MAT as row" class="row">
-            <span data-each="row as elem" class="sol">
-                <var>elem</var>
+        <div class="matrix-row" data-each="PADDED_SOLN_MAT as row">
+            <span data-each="row as elem">
+                <span class="sol" data-forms="integer" data-if="elem !== ''">
+                    <var>elem</var>
+                </span>
+                <span class="sol" data-else="" data-type="text">
+                    <var>elem</var>
+                </span>
             </span>
-        </p>
+        </div>
     </div>
 
     <div class="problems">

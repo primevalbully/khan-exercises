@@ -4,7 +4,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Trigonometry 1</title>
-    <script src="../khan-exercise.js"></script>
+    <script data-main="../local-only/main.js" src="../local-only/require.js"></script>
     <script>
     function fractionSQRoot(b, root){
         var natRoot = KhanUtil.splitRadical( root )[0];
@@ -129,6 +129,7 @@
                         </div>
                         <div class="question">
                             <p>What is <code>\sin(\angle <var>ANGLE</var>)</code> ?</p>
+                            <p><em>Remember to rationalize the denominator if necessary.</em></p>
 
                             <div class="graphie">
                                 betterTriangle( BC, AC, "A", "B", "C", BC, AC, AB_STRING );
@@ -137,7 +138,7 @@
                         </div>
 
                         <div class="solution"><code><var>SIN</var></code></div>
-                        <ul class="choices" data-show="4" data-none="true">
+                        <ul class="choices" data-none="true" data-show="4">
                             <li data-if="COS !== SIN"><code><var>COS</var></code></li>
                             <li><code><var>SIN</var></code></li>
                             <li><code><var>TAN</var></code></li>
@@ -165,6 +166,7 @@
                         </div>
                         <div class="question">
                             <p>What is <code>\cos(\angle <var>ANGLE</var>)</code> ?</p>
+                            <p><em>Remember to rationalize the denominator if necessary.</em></p>
 
                             <div class="graphie">
                                 betterTriangle( BC, AC, "A", "B", "C", BC, AC, AB_STRING );
@@ -192,6 +194,7 @@
                         </div>
                         <div class="question">
                             <p>What is <code>\tan(\angle <var>ANGLE</var>)</code> ?</p>
+                            <p><em>Remember to rationalize the denominator if necessary.</em></p>
 
                             <div class="graphie">
                                 betterTriangle( BC, AC, "A", "B", "C", BC, AC, AB_STRING );
@@ -214,5 +217,5 @@
                 </div>
 
             </div>
-        </body>
-        </html>
+</body>
+</html>

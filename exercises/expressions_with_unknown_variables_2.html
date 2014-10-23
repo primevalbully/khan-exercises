@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Expressions with unknown variables 2</title>
-    <script src="../khan-exercise.js"></script>
+    <script data-main="../local-only/main.js" src="../local-only/require.js"></script>
 </head>
 <body>
     <div class="exercise">
@@ -23,7 +23,7 @@
             </var>
 
             <var id="VALUES">[ randRangeNonZero( -10, 10 ), randRangeNonZero( -10, 10 ) ]</var>
-            <var id="FACTORS">[ randRangeNonZero( -10, 10 ), randRangeNonZero( -10, 10 ) ]</var>
+            <var id="FACTORS" data-ensure="FACTORS[0] !== 1 && FACTORS[1] !== 1">[ randRangeNonZero( -10, 10 ), randRangeNonZero( -10, 10 ) ]</var>
             <var id="ORIGINAL_EXPRESSIONS">
                 (function() {
                     var originals = [];
@@ -81,7 +81,7 @@
                 <span data-if="NUM_EXPRESSIONS === 2"> + (<var>FACTORS[ 1 ]</var>) \cdot (<var> VALUES[ 1 ]</var>)</span></code></p>
             <p data-if="NUM_EXPRESSIONS === 2"><code>= <var>FACTORS[ 0 ] * VALUES[ 0 ]</var> + <var>FACTORS[ 1 ] * VALUES[ 1 ]</var></code></p>
             <p><code>= <var>ANSWER</var></code>
-        </div>
+        </p></div>
     </div>
 </body>
 </html>

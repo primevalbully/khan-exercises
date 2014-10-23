@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html data-require="math graphie interactive ast math-model">
+<html data-require="math graphie interactive">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Graphing parabolas 1</title>
-    <script src="../khan-exercise.js"></script>
+    <title>Graphing parabolas in vertex form</title>
+    <script data-main="../local-only/main.js" src="../local-only/require.js"></script>
 </head>
 <body>
 <div class="exercise">
@@ -111,9 +111,21 @@
                 style({
                     stroke: KhanUtil.BLUE
                 }, function() {
-                    graph.parabola = plot( function( x ) {
-                        return coeffs[0] * x * x + coeffs[1] * x + coeffs[2];
-                    }, [ -11, 11 ] );
+                    // Apply the parabola
+                    var a = coeffs[0], b = coeffs[1], c = coeffs[2];
+                    var plot = function(x) {
+                        return [x, (a * x + b) * x + c];
+                    };
+
+                    // Calculate x-coordinates of points on parabola
+                    var xVertex = (a === 0) ? 0 : -b / (2 * a);
+                    var xExtent = Math.max(
+                        Math.abs(xVertex - 11),
+                        Math.abs(xVertex + 11)
+                    );
+                    var xPoint = xVertex + xExtent;
+
+                    graph.parabola = parabola(plot(xVertex), plot(xPoint));
                     graph.parabola.toBack();
                 });
             };
@@ -188,14 +200,6 @@
                 <var id="Y1">A * ( X1 - H ) * ( X1 - H ) + K</var>
                 <var id="X2">H - 1</var>
                 <var id="Y2">A * ( X2 - H ) * ( X2 - H ) + K</var>
-                <var id="GROUP1">[
-                    parse( "y &amp;= a( x - #{h})^2 + #{k}", [ GREEN, GREEN ] ),
-                    parse( "y &amp;= " + A_DISP + "( x - #{" + H + "})^2 + #{" + K + "}", [ GREEN, GREEN ] )
-                ]</var>
-                <var id="GROUP2">[
-                    parse( A_DISP + "( #{x} - " + H + ")^2 + " + K + " &amp;= y", [ PINK ] ),
-                    parse( A_DISP + "( #{" + X1 + "} - " + H + ")^2 + " + K + " &amp;= #{" + Y1 + "}", [ PINK, PINK ] )
-                ]</var>
             </div>
             <div class="problem" data-apply="prependContents">
                 <p class="hint_blue">
@@ -206,12 +210,12 @@
                 <p>The equation is in vertex form, so we can use the vertex as one of the points.</p>
 
                 <div>
-                    <p>When the equation is written in vertex form like this, the vertex is the point <code class="hint_green">(h, k)</code>:
-                    <p><code>\qquad <var>formatGroup( GROUP1, [ 0 ] )</var></code></p>
+                    <p>When the equation is written in vertex form like this, the vertex is the point <code class="hint_green">(h, k)</code>:</p>
+                    <p><code>\qquad y = a(x-\green{h})^2+\green{k}</code></p>
                 </div>
 
                 <div>
-                    <p><code>\qquad <var>formatGroup( GROUP1, [ 1 ] )</var></code></p>
+                    <p><code>\qquad y = <var>A_DISP</var>(x-\green{<var>H</var>})^2+\green{<var>K</var>}</code></p>
                     <p>Examining our equation, we can see the vertex of the parabola is at <code class="hint_green">(<var>H</var>, <var>K</var>)</code>.</p>
                     <div class="graphie" data-update="grid">
                         style({
@@ -228,12 +232,17 @@
 
                 <div>
                     <p>
-                        Since the vertex is at <code class="hint_green">x = <var>H</code></code>, let's try one unit to the right and evaluate
+                        Since the vertex is at <code class="hint_green">x = <var>H</var></code>, let's try one unit to the right and evaluate
                         the equation at <code class="hint_pink">x = <var>X1</var></code>.
                     </p>
-                    <p><code>\qquad <var>formatGroup( GROUP2, [ 0, 1 ] )</var></code></p>
+                    <p><code>\qquad
+                        \begin{eqnarray}
+                        <var>A_DISP</var>(\pink{x} - <var>H</var>)^2 + <var>K</var> &amp;=&amp; y \\ \\
+                        <var>A_DISP</var>(\pink{<var>X1</var>} - <var>H</var>)^2 + <var>K</var> &amp;=&amp; \pink{<var>Y1</var>}
+                        \end{eqnarray}
+                    </code></p>
                     <p>Another point on the parabola is <code class="hint_pink">(<var>X1</var>, <var>Y1</var>)</code>
-                    <div class="graphie" data-update="grid">
+                    </p><div class="graphie" data-update="grid">
                         style({
                             stroke: PINK,
                             strokeWidth: 3
@@ -277,7 +286,7 @@
                 <div>
                     <p class="final_answer">
                         There is only one graph of a parabola that passes through all three points we found.
-                        <br /><input type="button" value="Show me" onClick="javascript:KhanUtil.currentGraph.graph.showSolution();" />
+                        <br><input onclick="javascript:KhanUtil.currentGraph.graph.showSolution();" type="button" value="Show me">
                     </p>
                 </div>
 
